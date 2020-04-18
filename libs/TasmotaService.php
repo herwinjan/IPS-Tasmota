@@ -1,18 +1,15 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types = 1);
 
 if (!function_exists('fnmatch')) {
-    function fnmatch($pattern, $string)
-    {
+    function fnmatch($pattern, $string) {
         return preg_match('#^' . strtr(preg_quote($pattern, '#'), ['\*' => '.*', '\?' => '.']) . '$#i', $string);
     }
 }
 
-class TasmotaService extends IPSModule
-{
-    public function restart()
-    {
+class TasmotaService extends IPSModule {
+    public function restart() {
         $command = 'restart';
         $msg = strval(1);
 
@@ -26,8 +23,7 @@ class TasmotaService extends IPSModule
         $this->MQTTCommand($command, $msg, $retain);
     }
 
-    public function sendMQTTCommand(string $command, string $msg)
-    {
+    public function sendMQTTCommand(string $command, string $msg) {
         $retain = $this->ReadPropertyBoolean('MessageRetain');
         if ($retain) {
             $retain = true;
@@ -51,8 +47,7 @@ class TasmotaService extends IPSModule
         return $result;
     }
 
-    public function setPowerOnState(int $value)
-    {
+    public function setPowerOnState(int $value) {
         $command = 'PowerOnState';
         $msg = strval($value);
 
@@ -65,8 +60,7 @@ class TasmotaService extends IPSModule
         $this->MQTTCommand($command, $msg, $retain);
     }
 
-    public function setPower(int $power, bool $Value)
-    {
+    public function setPower(int $power, bool $Value) {
         if ($power != 0) {
             $PowerIdent = 'Tasmota_POWER' . strval($power);
             $powerTopic = 'POWER' . strval($power);
@@ -90,8 +84,7 @@ class TasmotaService extends IPSModule
         $this->MQTTCommand($command, $msg, $retain);
     }
 
-    protected function MQTTCommand($command, $Payload, $retain = 0)
-    {
+    protected function MQTTCommand($command, $Payload, $retain = 0) {
         $retain = $this->ReadPropertyBoolean('MessageRetain');
         if ($retain) {
             $retain = true;
@@ -148,15 +141,13 @@ class TasmotaService extends IPSModule
         }
     }
 
-    protected function Debug($Meldungsname, $Daten, $Category)
-    {
+    protected function Debug($Meldungsname, $Daten, $Category) {
         if ($this->ReadPropertyBoolean($Category) == true) {
             $this->SendDebug($Meldungsname, $Daten, 0);
         }
     }
 
-    protected function FilterFullTopicReceiveData()
-    {
+    protected function FilterFullTopicReceiveData() {
         $FullTopic = explode('/', $this->ReadPropertyString('FullTopic'));
         $PrefixIndex = array_search('%prefix%', $FullTopic);
         $TopicIndex = array_search('%topic%', $FullTopic);
@@ -170,8 +161,7 @@ class TasmotaService extends IPSModule
         return $topic;
     }
 
-    protected function setPowerOnStateInForm($value)
-    {
+    protected function setPowerOnStateInForm($value) {
         if ($value != $this->ReadPropertyInteger('PowerOnState')) {
             IPS_SetProperty($this->InstanceID, 'PowerOnState', $value);
             if (IPS_HasChanges($this->InstanceID)) {
@@ -181,8 +171,7 @@ class TasmotaService extends IPSModule
         return true;
     }
 
-    protected function RegisterProfileInteger($Name, $Icon, $Prefix, $Suffix, $MinValue, $MaxValue, $StepSize)
-    {
+    protected function RegisterProfileInteger($Name, $Icon, $Prefix, $Suffix, $MinValue, $MaxValue, $StepSize) {
         if (!IPS_VariableProfileExists($Name)) {
             IPS_CreateVariableProfile($Name, 1);
         } else {
@@ -197,8 +186,7 @@ class TasmotaService extends IPSModule
         IPS_SetVariableProfileValues($Name, $MinValue, $MaxValue, $StepSize);
     }
 
-    protected function RegisterProfileIntegerEx($Name, $Icon, $Prefix, $Suffix, $Associations)
-    {
+    protected function RegisterProfileIntegerEx($Name, $Icon, $Prefix, $Suffix, $Associations) {
         if (count($Associations) === 0) {
             $MinValue = 0;
             $MaxValue = 0;
@@ -214,8 +202,7 @@ class TasmotaService extends IPSModule
         }
     }
 
-    protected function RegisterProfileBoolean($Name, $Icon, $Prefix, $Suffix, $MinValue, $MaxValue, $StepSize)
-    {
+    protected function RegisterProfileBoolean($Name, $Icon, $Prefix, $Suffix, $MinValue, $MaxValue, $StepSize) {
         if (!IPS_VariableProfileExists($Name)) {
             IPS_CreateVariableProfile($Name, 0);
         } else {
@@ -230,8 +217,7 @@ class TasmotaService extends IPSModule
         IPS_SetVariableProfileValues($Name, $MinValue, $MaxValue, $StepSize);
     }
 
-    protected function RegisterProfileBooleanEx($Name, $Icon, $Prefix, $Suffix, $Associations)
-    {
+    protected function RegisterProfileBooleanEx($Name, $Icon, $Prefix, $Suffix, $Associations) {
         if (count($Associations) === 0) {
             $MinValue = 0;
             $MaxValue = 0;
@@ -248,8 +234,7 @@ class TasmotaService extends IPSModule
     }
 
     //Für Sensoren
-    protected function find_parent($array, $needle, $parent = null)
-    {
+    protected function find_parent($array, $needle, $parent = null) {
         foreach ($array as $key => $value) {
             if (is_array($value)) {
                 $pass = $parent;
@@ -267,9 +252,8 @@ class TasmotaService extends IPSModule
         return false;
     }
 
-    protected function traverseArray($array, $GesamtArray)
-    {
-        foreach ($array as $key=> $value) {
+    protected function traverseArray($array, $GesamtArray) {
+        foreach ($array as $key => $value) {
             if (is_array($value)) {
                 $this->traverseArray($value, $GesamtArray);
             } else {
@@ -279,19 +263,19 @@ class TasmotaService extends IPSModule
                 if ((is_int($value) || is_float($value)) && ($ParentKey != 'MCP230XX') && ($ParentKey != 'PCA9685')) {
                     $key = str_replace('-', '_', $key);
                     switch ($key) {
-                        case 'Temperature':
-                            $variablenID = $this->RegisterVariableFloat('Tasmota_' . $ParentKey . '_' . $key, $ParentKey . ' Temperatur', '~Temperature');
+                    case 'Temperature':
+                        $variablenID = $this->RegisterVariableFloat('Tasmota_' . $ParentKey . '_' . $key, $ParentKey . ' Temperatur', '~Temperature');
+                        SetValue($this->GetIDForIdent('Tasmota_' . $ParentKey . '_' . $key), $value);
+                        break;
+                    case 'Humidity':
+                        $variablenID = $this->RegisterVariableFloat('Tasmota_' . $ParentKey . '_' . $key, $ParentKey . ' Feuchte', '~Humidity.F');
+                        SetValue($this->GetIDForIdent('Tasmota_' . $ParentKey . '_' . $key), $value);
+                        break;
+                    default:
+                        if ($ParentKey != 'ENERGY') {
+                            $variablenID = $this->RegisterVariableFloat('Tasmota_' . $ParentKey . '_' . $key, $ParentKey . ' ' . $key);
                             SetValue($this->GetIDForIdent('Tasmota_' . $ParentKey . '_' . $key), $value);
-                            break;
-                        case 'Humidity':
-                            $variablenID = $this->RegisterVariableFloat('Tasmota_' . $ParentKey . '_' . $key, $ParentKey . ' Feuchte', '~Humidity.F');
-                            SetValue($this->GetIDForIdent('Tasmota_' . $ParentKey . '_' . $key), $value);
-                            break;
-                        default:
-                            if ($ParentKey != 'ENERGY') {
-                                $variablenID = $this->RegisterVariableFloat('Tasmota_' . $ParentKey . '_' . $key, $ParentKey . ' ' . $key);
-                                SetValue($this->GetIDForIdent('Tasmota_' . $ParentKey . '_' . $key), $value);
-                            }
+                        }
                     }
                 }
                 if ($ParentKey == 'PN532') {
@@ -314,8 +298,7 @@ class TasmotaService extends IPSModule
         }
     }
 
-    protected function getSystemVariables($myBuffer)
-    {
+    protected function getSystemVariables($myBuffer) {
         $this->RegisterVariableString('Tasmota_Uptime', 'Uptime');
         SetValue($this->GetIDForIdent('Tasmota_Uptime'), $myBuffer->Uptime);
 

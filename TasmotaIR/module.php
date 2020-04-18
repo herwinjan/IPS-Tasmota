@@ -5,12 +5,10 @@ declare (strict_types = 1);
 require_once __DIR__ . '/../libs/TasmotaService.php';
 require_once __DIR__ . '/../libs/helper.php';
 
-class Tasmota extends TasmotaService
-{
+class Tasmota extends TasmotaService {
     use BufferHelper;
 
-    public function Create()
-    {
+    public function Create() {
         //Never delete this line!
         parent::Create();
         $this->BufferResponse = '';
@@ -31,8 +29,7 @@ class Tasmota extends TasmotaService
 
     }
 
-    public function ApplyChanges()
-    {
+    public function ApplyChanges() {
         //Never delete this line!
         parent::ApplyChanges();
         $this->BufferResponse = '';
@@ -49,22 +46,21 @@ class Tasmota extends TasmotaService
         $this->SetReceiveDataFilter('.*' . $topic . '.*');
     }
 
-    public function ReceiveData($JSONString)
-    {
+    public function ReceiveData($JSONString) {
         $this->SendDebug('JSON', $JSONString, 0);
         if (!empty($this->ReadPropertyString('Topic'))) {
             $data = json_decode($JSONString);
 
             switch ($data->DataID) {
-                case '{7F7632D9-FA40-4F38-8DEA-C83CD4325A32}': // MQTT Server
-                    $Buffer = $data;
-                    break;
-                case '{DBDA9DF7-5D04-F49D-370A-2B9153D00D9B}': //MQTT Client
-                    $Buffer = json_decode($data->Buffer);
-                    break;
-                default:
-                    $this->LogMessage('Invalid Parent', KL_ERROR);
-                    return;
+            case '{7F7632D9-FA40-4F38-8DEA-C83CD4325A32}': // MQTT Server
+                $Buffer = $data;
+                break;
+            case '{DBDA9DF7-5D04-F49D-370A-2B9153D00D9B}': //MQTT Client
+                $Buffer = json_decode($data->Buffer);
+                break;
+            default:
+                $this->LogMessage('Invalid Parent', KL_ERROR);
+                return;
             }
             $off = $this->ReadPropertyString('Off');
             $on = $this->ReadPropertyString('On');
@@ -165,8 +161,7 @@ class Tasmota extends TasmotaService
         }
     }
 
-    public function RequestAction($Ident, $Value)
-    {
+    public function RequestAction($Ident, $Value) {
         $this->SendDebug(__FUNCTION__ . ' Ident', $Ident, 0);
         $this->SendDebug(__FUNCTION__ . ' Value', $Value, 0);
 
@@ -178,15 +173,13 @@ class Tasmota extends TasmotaService
         $result = $this->setPower(intval($power), $Value);
     }
 
-    public function setFanSpeed(int $value)
-    {
+    public function setFanSpeed(int $value) {
         $command = 'FanSpeed';
         $msg = strval($value);
         $this->MQTTCommand($command, $msg);
     }
 
-    private function __createVariablenProfiles()
-    {
+    private function createVariablenProfiles() {
         //Online / Offline Profile
 
     }

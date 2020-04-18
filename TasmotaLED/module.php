@@ -1,13 +1,11 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types = 1);
 
 require_once __DIR__ . '/../libs/TasmotaService.php';
 
-class TasmotaLED extends TasmotaService
-{
-    public function Create()
-    {
+class TasmotaLED extends TasmotaService {
+    public function Create() {
         //Never delete this line!
         parent::Create();
         $this->BufferResponse = '';
@@ -40,8 +38,7 @@ class TasmotaLED extends TasmotaService
         $this->EnableAction('TasmotaLED_Dimmer');
     }
 
-    public function ApplyChanges()
-    {
+    public function ApplyChanges() {
         //Never delete this line!
         parent::ApplyChanges();
         $this->BufferResponse = '';
@@ -58,22 +55,21 @@ class TasmotaLED extends TasmotaService
         $this->SetReceiveDataFilter('.*' . $topic . '.*');
     }
 
-    public function ReceiveData($JSONString)
-    {
+    public function ReceiveData($JSONString) {
         if (!empty($this->ReadPropertyString('Topic'))) {
             $this->SendDebug('ReceiveData JSON', $JSONString, 0);
             $data = json_decode($JSONString);
 
             switch ($data->DataID) {
-                case '{7F7632D9-FA40-4F38-8DEA-C83CD4325A32}': // MQTT Server
-                    $Buffer = $data;
-                    break;
-                case '{DBDA9DF7-5D04-F49D-370A-2B9153D00D9B}': //MQTT Client
-                    $Buffer = json_decode($data->Buffer);
-                    break;
-                default:
-                    $this->LogMessage('Invalid Parent', KL_ERROR);
-                    return;
+            case '{7F7632D9-FA40-4F38-8DEA-C83CD4325A32}': // MQTT Server
+                $Buffer = $data;
+                break;
+            case '{DBDA9DF7-5D04-F49D-370A-2B9153D00D9B}': //MQTT Client
+                $Buffer = json_decode($data->Buffer);
+                break;
+            default:
+                $this->LogMessage('Invalid Parent', KL_ERROR);
+                return;
             }
 
             // Buffer decodieren und in eine Variable schreiben
@@ -99,12 +95,12 @@ class TasmotaLED extends TasmotaService
                         $this->EnableAction('TasmotaLED_POWER');
                         $this->SendDebug('Receive Result: POWER', $Payload->POWER, 0);
                         switch ($Payload->POWER) {
-                            case $this->ReadPropertyString('Off'):
-                                SetValue($this->GetIDForIdent('TasmotaLED_POWER'), 0);
-                                break;
-                            case $this->ReadPropertyString('On'):
-                                SetValue($this->GetIDForIdent('TasmotaLED_POWER'), 1);
-                                break;
+                        case $this->ReadPropertyString('Off'):
+                            SetValue($this->GetIDForIdent('TasmotaLED_POWER'), 0);
+                            break;
+                        case $this->ReadPropertyString('On'):
+                            SetValue($this->GetIDForIdent('TasmotaLED_POWER'), 1);
+                            break;
                         }
                     }
                 } else {
@@ -116,12 +112,12 @@ class TasmotaLED extends TasmotaService
                             $this->EnableAction('TasmotaLED_POWER' . $i);
                             $this->SendDebug('Receive Result: POWER' . $i, $Payload->{'POWER' . $i}, 0);
                             switch ($Payload->{'POWER' . $i}) {
-                                case $this->ReadPropertyString('Off'):
-                                    SetValue($this->GetIDForIdent('TasmotaLED_POWER' . $i), 0);
-                                    break;
-                                case $this->ReadPropertyString('On'):
-                                    SetValue($this->GetIDForIdent('TasmotaLED_POWER' . $i), 1);
-                                    break;
+                            case $this->ReadPropertyString('Off'):
+                                SetValue($this->GetIDForIdent('TasmotaLED_POWER' . $i), 0);
+                                break;
+                            case $this->ReadPropertyString('On'):
+                                SetValue($this->GetIDForIdent('TasmotaLED_POWER' . $i), 1);
+                                break;
                             }
                         }
                     }
@@ -180,43 +176,37 @@ class TasmotaLED extends TasmotaService
         }
     }
 
-    public function setLED(int $LED, string $color)
-    {
+    public function setLED(int $LED, string $color) {
         $command = 'Led' . $LED;
         $msg = $color;
         $this->MQTTCommand($command, $msg);
     }
 
-    public function setScheme(int $schemeID)
-    {
+    public function setScheme(int $schemeID) {
         $command = 'Scheme';
         $msg = strval($schemeID);
         $this->MQTTCommand($command, $msg);
     }
 
-    public function setPixel(int $count)
-    {
+    public function setPixel(int $count) {
         $command = 'Pixels';
         $msg = strval($count);
         $this->MQTTCommand($command, $msg);
     }
 
-    public function setDimmer(int $value)
-    {
+    public function setDimmer(int $value) {
         $command = 'Dimmer';
         $msg = strval($value);
         $this->MQTTCommand($command, $msg);
     }
 
-    public function setColorHex(string $color)
-    {
+    public function setColorHex(string $color) {
         $command = 'Color';
         $msg = $color;
         $this->MQTTCommand($command, $msg);
     }
 
-    public function setFade(bool $value)
-    {
+    public function setFade(bool $value) {
         $command = 'Fade';
         $msg = $value;
         if ($msg === false) {
@@ -227,15 +217,13 @@ class TasmotaLED extends TasmotaService
         $this->MQTTCommand($command, $msg);
     }
 
-    public function setSpeed(int $value)
-    {
+    public function setSpeed(int $value) {
         $command = 'Speed';
         $msg = strval($value);
         $this->MQTTCommand($command, $msg);
     }
 
-    public function RequestAction($Ident, $Value)
-    {
+    public function RequestAction($Ident, $Value) {
         //Power Variablen
         if (fnmatch('TasmotaLED_POWER*', $Ident)) {
             if (strlen($Ident) != 16) {
@@ -246,40 +234,39 @@ class TasmotaLED extends TasmotaService
             $this->setPower(intval($power), $Value);
         }
         switch ($Ident) {
-      case 'TasmotaLED_Speed':
-        $this->setSpeed($Value);
-        break;
-      case 'TasmotaLED_Fade':
-        $this->setFade($Value);
-        break;
-      case 'TasmotaLED_Scheme':
-        $this->setScheme($Value);
-        break;
-      case 'TasmotaLED_Color':
-          $rgb = $Value;
-           $r = (($rgb >> 16) & 0xFF);
-          $g = (($rgb >> 8) & 0xFF);
-          $b = ($rgb & 0xFF);
-          $this->setColorHex("$r,$g,$b");
-        break;
-      case 'TasmotaLED_Dimmer':
-        $this->setDimmer($Value);
-        break;
-      default:
-        // code...
-        break;
-    }
+        case 'TasmotaLED_Speed':
+            $this->setSpeed($Value);
+            break;
+        case 'TasmotaLED_Fade':
+            $this->setFade($Value);
+            break;
+        case 'TasmotaLED_Scheme':
+            $this->setScheme($Value);
+            break;
+        case 'TasmotaLED_Color':
+            $rgb = $Value;
+            $r = (($rgb >> 16) & 0xFF);
+            $g = (($rgb >> 8) & 0xFF);
+            $b = ($rgb & 0xFF);
+            $this->setColorHex("$r,$g,$b");
+            break;
+        case 'TasmotaLED_Dimmer':
+            $this->setDimmer($Value);
+            break;
+        default:
+            // code...
+            break;
+        }
     }
 
-    private function createVariabenProfiles()
-    {
+    private function createVariabenProfiles() {
         //Speed Profile
         $this->RegisterProfileInteger('TasmotaLED.Speed', 'Speedo', '', '', 1, 20, 1);
         $this->RegisterProfileInteger('TasmotaLED.RSSI', 'Intensity', '', '', 1, 100, 1);
         //Scheme Profile
         $this->RegisterProfileIntegerEx('TasmotaLED.Scheme', 'Shuffle', '', '', [
-            [0, 'Default',  '', -1],
-            [1, 'Wake up',  '', -1],
+            [0, 'Default', '', -1],
+            [1, 'Wake up', '', -1],
             [2, 'RGB Cycle', '', -1],
             [3, 'RBG Cycle', '', -1],
             [4, 'Random cycle', '', -1],
@@ -290,12 +277,12 @@ class TasmotaLED extends TasmotaService
             [9, 'Hanukkah', '', -1],
             [10, 'Kwanzaa', '', -1],
             [11, 'Rainbow', '', -1],
-            [12, 'Fire', '', -1]
+            [12, 'Fire', '', -1],
         ]);
         //Online / Offline Profile
         $this->RegisterProfileBooleanEx('TasmotaLED.DeviceStatus', 'Network', '', '', [
-            [false, 'Offline',  '', 0xFF0000],
-            [true, 'Online',  '', 0x00FF00]
+            [false, 'Offline', '', 0xFF0000],
+            [true, 'Online', '', 0x00FF00],
         ]);
     }
 }

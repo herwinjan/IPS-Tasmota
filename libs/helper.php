@@ -1,9 +1,8 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types = 1);
 
-trait BufferHelper
-{
+trait BufferHelper {
     /**
      * Wert einer Eigenschaft aus den InstanceBuffer lesen.
      *
@@ -11,8 +10,7 @@ trait BufferHelper
      *
      * @return mixed Value of Name
      */
-    public function __get($name)
-    {
+    public function __get($name) {
         return unserialize($this->GetBuffer($name));
     }
 
@@ -22,8 +20,7 @@ trait BufferHelper
      * @param string $name Propertyname
      * @param mixed Value of Name
      */
-    public function __set($name, $value)
-    {
+    public function __set($name, $value) {
         $this->SetBuffer($name, serialize($value));
     }
 }
