@@ -69,7 +69,7 @@ class TasmotaConfigurator extends TasmotaService {
         return json_encode($data);
     }
 
-    private function __searchTasmotaDevice($topic) {
+    private function searchTasmotaDevice($topic) {
         $idsTasmota = IPS_GetInstanceListByModuleID('{1349F095-4820-4DB8-82EB-C1E93E680F08}');
         $idsTasmotaLed = IPS_GetInstanceListByModuleID('{5466CCED-1DA1-4FD9-9CBD-18E9399EFF42}');
         $ids = array_merge($idsTasmota, $idsTasmotaLed);
