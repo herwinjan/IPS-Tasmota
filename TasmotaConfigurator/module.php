@@ -56,7 +56,7 @@ class TasmotaConfigurator extends TasmotaService {
                                 'Topic' => $device['Topic'],
                             ],
                         ],
-                        'TasmotaSwitchTopic' => [
+                        'TasmotaIRTopic' => [
                             'moduleID' => '{117AD5C2-BB93-0AB2-C0F0-97A5041741DC}',
                             'configuration' => [
                                 'Topic' => $device['Topic'],
