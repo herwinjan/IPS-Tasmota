@@ -5,7 +5,7 @@ declare (strict_types = 1);
 require_once __DIR__ . '/../libs/TasmotaService.php';
 require_once __DIR__ . '/../libs/helper.php';
 
-class Tasmota extends TasmotaService {
+class TasmotaIR extends TasmotaService {
     use BufferHelper;
 
     public function Create() {
