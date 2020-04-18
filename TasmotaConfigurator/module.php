@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types = 1);
 
 ini_set('max_execution_time', '0');
 require_once __DIR__ . '/../libs/TasmotaService.php';
@@ -34,40 +34,46 @@ class TasmotaConfigurator extends TasmotaService
                     $InstanzName = IPS_GetInstance($instanceID)['ModuleInfo']['ModuleName'];
                 }
                 $data->actions[0]->values[] = [
-                    'IP'                    => $device['IP'],
-                    'Topic'                 => $device['Topic'],
-                    'FriendlyName'          => $device['FriendlyName'],
-                    'Module'                => $device['Module'],
-                    'Firmware'              => $device['FW'],
-                    'Instanz'               => $InstanzName,
-                    'instanceID'            => $instanceID,
-                    'create'                => [
-                        'Tasmota'     => [
-                            'moduleID'      => '{1349F095-4820-4DB8-82EB-C1E93E680F08}',
+                    'IP' => $device['IP'],
+                    'Topic' => $device['Topic'],
+                    'FriendlyName' => $device['FriendlyName'],
+                    'Module' => $device['Module'],
+                    'Firmware' => $device['FW'],
+                    'Instanz' => $InstanzName,
+                    'instanceID' => $instanceID,
+                    'create' => [
+                        'Tasmota' => [
+                            'moduleID' => '{1349F095-4820-4DB8-82EB-C1E93E680F08}',
                             'configuration' => [
-                                'Topic'    => $device['Topic']
-                            ]
+                                'Topic' => $device['Topic'],
+                            ],
                         ],
-                        'TasmotaLED'     => [
-                            'moduleID'      => '{5466CCED-1DA1-4FD9-9CBD-18E9399EFF42}',
+                        'TasmotaLED' => [
+                            'moduleID' => '{5466CCED-1DA1-4FD9-9CBD-18E9399EFF42}',
                             'configuration' => [
-                                'Topic'    => $device['Topic']
-                            ]
+                                'Topic' => $device['Topic'],
+                            ],
                         ],
-                        'TasmotaSwitchTopic'     => [
-                            'moduleID'      => '{74BEB8D0-6BA8-4159-B7B8-E95EB7B29779}',
+                        'TasmotaSwitchTopic' => [
+                            'moduleID' => '{74BEB8D0-6BA8-4159-B7B8-E95EB7B29779}',
                             'configuration' => [
-                                'Topic'    => $device['Topic']
-                            ]
-                        ]
-                    ]
+                                'Topic' => $device['Topic'],
+                            ],
+                        ],
+                        'TasmotaSwitchTopic' => [
+                            'moduleID' => '{117AD5C2-BB93-0AB2-C0F0-97A5041741DC}',
+                            'configuration' => [
+                                'Topic' => $device['Topic'],
+                            ],
+                        ],
+                    ],
                 ];
             }
         }
         return json_encode($data);
     }
 
-    private function searchTasmotaDevice($topic)
+    private function __searchTasmotaDevice($topic)
     {
         $idsTasmota = IPS_GetInstanceListByModuleID('{1349F095-4820-4DB8-82EB-C1E93E680F08}');
         $idsTasmotaLed = IPS_GetInstanceListByModuleID('{5466CCED-1DA1-4FD9-9CBD-18E9399EFF42}');
@@ -80,7 +86,7 @@ class TasmotaConfigurator extends TasmotaService
         return 0;
     }
 
-    private function getTasmotaDevices()
+    private function __getTasmotaDevices()
     {
         $OfflineIPs = [];
         $sIP1 = $this->ReadPropertyString('StartIP');
@@ -134,7 +140,7 @@ class TasmotaConfigurator extends TasmotaService
         return $TasmotaDevices;
     }
 
-    private function getFirmwareVersion($ip)
+    private function __getFirmwareVersion($ip)
     {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $ip . '/cm?cmnd=Status%202');
@@ -149,7 +155,7 @@ class TasmotaConfigurator extends TasmotaService
         return $result['StatusFWR']['Version'];
     }
 
-    private function getModule($ip)
+    private function __getModule($ip)
     {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $ip . '/cm?cmnd=Module');
@@ -164,7 +170,7 @@ class TasmotaConfigurator extends TasmotaService
         return $result['Module'];
     }
 
-    private function getFriendlyName($ip)
+    private function __getFriendlyName($ip)
     {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $ip . '/cm?cmnd=friendlyname');
