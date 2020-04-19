@@ -5,45 +5,44 @@ declare (strict_types = 1);
 require_once __DIR__ . '/../libs/TasmotaService.php';
 require_once __DIR__ . '/../libs/helper.php';
 
-
+$modes = array(
+    array(0, "Off", "", -1),
+    array(1, "Auto", "", -1),
+    array(2, "Cool", "", -1),
+    array(3, "Heat", "", -1),
+    array(4, "Dry", "", -1),
+    array(5, "fan", "", -1),
+);
+$fanSpeeds = array(
+    array(0, "Auto", "", -1),
+    array(1, "Minimal", "", -1),
+    array(2, "Low", "", -1),
+    array(3, "Medium", "", -1),
+    array(4, "High", "", -1),
+    array(5, "Max", "", -1),
+);
+$swingVs = array(
+    array(0, "Auto", "", -1),
+    array(1, "Off", "", -1),
+    array(2, "Min", "", -1),
+    array(3, "Low", "", -1),
+    array(4, "Middle", "", -1),
+    array(5, "High", "", -1),
+    array(6, "Highest", "", -1),
+);
+$swingHs = array(
+    array(0, "Auto", "", -1),
+    array(1, "Off", "", -1),
+    array(2, "LeftMax", "", -1),
+    array(3, "Left", "", -1),
+    array(4, "Middle", "", -1),
+    array(5, "Right", "", -1),
+    array(6, "RightMax", "", -1),
+    array(7, "Wide", "", -1),
+);
 
 class TasmotaIR extends TasmotaService {
     use BufferHelper;
-    $modes = array(
-        array(0, "Off", "", -1),
-        array(1, "Auto", "", -1),
-        array(2, "Cool", "", -1),
-        array(3, "Heat", "", -1),
-        array(4, "Dry", "", -1),
-        array(5, "fan", "", -1),
-    );
-    $fanSpeeds = array(
-        array(0, "Auto", "", -1),
-        array(1, "Minimal", "", -1),
-        array(2, "Low", "", -1),
-        array(3, "Medium", "", -1),
-        array(4, "High", "", -1),
-        array(5, "Max", "", -1),
-    );
-    $swingVs = array(
-        array(0, "Auto", "", -1),
-        array(1, "Off", "", -1),
-        array(2, "Min", "", -1),
-        array(3, "Low", "", -1),
-        array(4, "Middle", "", -1),
-        array(5, "High", "", -1),
-        array(6, "Highest", "", -1),
-    );
-    $swingHs = array(
-        array(0, "Auto", "", -1),
-        array(1, "Off", "", -1),
-        array(2, "LeftMax", "", -1),
-        array(3, "Left", "", -1),
-        array(4, "Middle", "", -1),
-        array(5, "Right", "", -1),
-        array(6, "RightMax", "", -1),
-        array(7, "Wide", "", -1),
-    );
 
     public function Create() {
         //Never delete this line!
@@ -220,6 +219,7 @@ class TasmotaIR extends TasmotaService {
     }
 
     protected function sendCommandToHVAC() {
+        global $modes, $fanSpeeds, $swingHs, $swingVs;
         $payload['Vendor'] = $this->ReadPropertyString('AircoType');
         $payload['Power'] = $this->GetValue("TasmotaHVAC_Power") ? "On" : "Off";
         $payload['Mode'] = $modes[$this->GetValue("TasmotaHVAC_Mode")][1];
@@ -257,6 +257,7 @@ class TasmotaIR extends TasmotaService {
 
     private function createVariablenProfiles() {
         //Online / Offline Profile
+        global $modes, $fanSpeeds, $swingHs, $swingVs;
 
         $this->RegisterProfileBooleanEx('TasmotaHVAC.DeviceStatus', 'Network', '', '', [
             [false, 'Offline', '', 0xFF0000],
