@@ -221,16 +221,16 @@ class TasmotaIR extends TasmotaService {
     protected function sendCommandToHVAC() {
         global $modes, $fanSpeeds, $swingHs, $swingVs;
         $payload['Vendor'] = $this->ReadPropertyString('AircoType');
-        $payload['Power'] = $this->getValue("TasmotaHVAC_Power") ? "On" : "Off";
-        $payload['Mode'] = $modes[$this->getValue("TasmotaHVAC_Mode")][1];
-        $payload['FanSpeed'] = $fanSpeeds[$this->getValue("TasmotaHVAC_FanSpeed")][1];
+        $payload['Power'] = $this->_getValue("TasmotaHVAC_Power") ? "On" : "Off";
+        $payload['Mode'] = $modes[$this->_getValue("TasmotaHVAC_Mode")][1];
+        $payload['FanSpeed'] = $fanSpeeds[$this->_getValue("TasmotaHVAC_FanSpeed")][1];
 
-        $payload['SwingV'] = $swingVs[$this->getValue("TasmotaHVAC_SwingV")][1];
-        $payload['SwingH'] = $swingHs[$this->getValue("TasmotaHVAC_SwingH")][1];
-        $payload['Quiet'] = $this->getValue("TasmotaHVAC_Quiet") ? "On" : "Off";
-        $payload['Turbo'] = $this->getValue("TasmotaHVAC_Turbo") ? "On" : "Off";
-        $payload['Econo'] = $this->getValue("TasmotaHVAC_Econo") ? "On" : "Off";
-        $payload['Temp'] = $this->getValue("TasmotaHVAC_Temperature");
+        $payload['SwingV'] = $swingVs[$this->_getValue("TasmotaHVAC_SwingV")][1];
+        $payload['SwingH'] = $swingHs[$this->_getValue("TasmotaHVAC_SwingH")][1];
+        $payload['Quiet'] = $this->_getValue("TasmotaHVAC_Quiet") ? "On" : "Off";
+        $payload['Turbo'] = $this->_getValue("TasmotaHVAC_Turbo") ? "On" : "Off";
+        $payload['Econo'] = $this->_getValue("TasmotaHVAC_Econo") ? "On" : "Off";
+        $payload['Temp'] = $this->_getValue("TasmotaHVAC_Temperature");
 
         $payloadJSON = json_encode($payload, JSON_UNESCAPED_SLASHES);
         $this->SendDebug(__FUNCTION__ . ' JSON', $payloadJSON, 0);
@@ -246,7 +246,7 @@ class TasmotaIR extends TasmotaService {
 
     }
 
-    protected function getValue($name, $value) {
+    protected function _getValue($name, $value) {
         $sid = @IPS_GetObjectIDByIdent($name, $this->InstanceID);
         // $this->SendDebug(__FUNCTION__, "SV: ".$name." -> ".$sid." -> ".$value,0);
         if ($sid) {
