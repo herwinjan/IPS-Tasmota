@@ -143,6 +143,26 @@ class TasmotaIR extends TasmotaService {
         //    $power = 0;
         // }
         //$result = $this->setPower(intval($power), $Value);
+
+        switch ($Ident) {
+        case 'TasmotaHVAC_Power':
+            $this->setNewValue("TasmotaHVAC_Power", $Value);
+            break;
+
+        default:
+            // code...
+            break;
+        }
+
+    }
+
+    protected function setNewValue($name, $value) {
+        $sid = @IPS_GetObjectIDByIdent($name, $this->InstanceID);
+        // $this->SendDebug(__FUNCTION__, "SV: ".$name." -> ".$sid." -> ".$value,0);
+        if ($sid) {
+            SetValue($sid, $value);
+        }
+
     }
 
     private function createVariablenProfiles() {
