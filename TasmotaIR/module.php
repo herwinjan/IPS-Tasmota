@@ -38,6 +38,8 @@ class TasmotaIR extends TasmotaService {
 
         //Anzahl die in der Konfirgurationsform angezeigt wird - Hier Standard auf 1
         $this->RegisterPropertyString('Topic', '');
+        $this->RegisterPropertyString('On', 'ON');
+        $this->RegisterPropertyString('Off', 'OFF');
         $this->RegisterPropertyString('FullTopic', '%prefix%/%topic%');
         $this->RegisterPropertyInteger('PowerOnState', 3);
         $this->RegisterPropertyInteger('GatewayMode', 0);
