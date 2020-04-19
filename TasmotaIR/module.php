@@ -5,6 +5,42 @@ declare (strict_types = 1);
 require_once __DIR__ . '/../libs/TasmotaService.php';
 require_once __DIR__ . '/../libs/helper.php';
 
+$modes = array(
+    array(0, "Off", "", -1),
+    array(1, "Auto", "", -1),
+    array(2, "Cool", "", -1),
+    array(3, "Heat", "", -1),
+    array(4, "Dry", "", -1),
+    array(5, "fan", "", -1),
+);
+$fanSpeeds = array(
+    array(0, "Auto", "", -1),
+    array(1, "Minimal", "", -1),
+    array(2, "Low", "", -1),
+    array(3, "Medium", "", -1),
+    array(4, "High", "", -1),
+    array(5, "Max", "", -1),
+);
+$swingVs = array(
+    array(0, "Auto", "", -1),
+    array(1, "Off", "", -1),
+    array(2, "Min", "", -1),
+    array(3, "Low", "", -1),
+    array(4, "Middle", "", -1),
+    array(5, "High", "", -1),
+    array(6, "Highest", "", -1),
+);
+$swingHs = array(
+    array(0, "Auto", "", -1),
+    array(1, "Off", "", -1),
+    array(2, "LeftMax", "", -1),
+    array(3, "Left", "", -1),
+    array(4, "Middle", "", -1),
+    array(5, "Right", "", -1),
+    array(6, "RightMax", "", -1),
+    array(7, "Wide", "", -1),
+);
+
 class TasmotaIR extends TasmotaService {
     use BufferHelper;
 
@@ -140,36 +176,63 @@ class TasmotaIR extends TasmotaService {
         switch ($Ident) {
         case 'TasmotaHVAC_Power':
             $this->setNewValue("TasmotaHVAC_Power", $Value);
+            $this->sendCommandToHVAC();
             break;
         case 'TasmotaHVAC_Mode':
             $this->setNewValue("TasmotaHVAC_Mode", $Value);
+            $this->sendCommandToHVAC();
             break;
         case 'TasmotaHVAC_FanSpeed':
             $this->setNewValue("TasmotaHVAC_FanSpeed", $Value);
+            $this->sendCommandToHVAC();
             break;
         case 'TasmotaHVAC_SwingV':
             $this->setNewValue("TasmotaHVAC_SwingV", $Value);
+            $this->sendCommandToHVAC();
             break;
         case 'TasmotaHVAC_SwingH':
             $this->setNewValue("TasmotaHVAC_SwingH", $Value);
+            $this->sendCommandToHVAC();
             break;
         case 'TasmotaHVAC_Quiet':
             $this->setNewValue("TasmotaHVAC_Quiet", $Value);
+            $this->sendCommandToHVAC();
             break;
         case 'TasmotaHVAC_Turbo':
             $this->setNewValue("TasmotaHVAC_Turbo", $Value);
+            $this->sendCommandToHVAC();
             break;
         case 'TasmotaHVAC_Econo':
             $this->setNewValue("TasmotaHVAC_Econo", $Value);
+            $this->sendCommandToHVAC();
             break;
         case 'TasmotaHVAC_Temperature':
             $this->setNewValue("TasmotaHVAC_Temperature", $Value);
+            $this->sendCommandToHVAC();
             break;
 
         default:
             // code...
             break;
         }
+
+    }
+
+    protected function sendCommandToHVAC() {
+        $payload['Vendor'] = $this->ReadPropertyString('AircoType');
+        $payload['Power'] = $this->GetValue("TasmotaHVAC_Power") ? "On" : "Off";
+        $payload['Mode'] = $modes[$this->GetValue("TasmotaHVAC_Mode")][1];
+        $payload['FanSpeed'] = $fanSpeeds[$this->GetValue("TasmotaHVAC_FanSpeed")][1];
+
+        $payload['SwingV'] = $swingVs[$this->GetValue("TasmotaHVAC_SwingV")][1];
+        $payload['SwingH'] = $swingHs[$this->GetValue("TasmotaHVAC_SwingH")][1];
+        $payload['Quiet'] = $this->GetValue("TasmotaHVAC_Quiet") ? "On" : "Off";
+        $payload['Turbo'] = $this->GetValue("TasmotaHVAC_Turbo") ? "On" : "Off";
+        $payload['Econo'] = $this->GetValue("TasmotaHVAC_Econo") ? "On" : "Off";
+        $payload['Temp'] = $this->getValue("TasmotaHVAC_Temperature");
+
+        $payloadJSON = json_encode($payload, JSON_UNESCAPED_SLASHES);
+        $this->SendDebug(__FUNCTION__ . ' JSON', $payloadJSON, 0);
 
     }
 
@@ -180,6 +243,15 @@ class TasmotaIR extends TasmotaService {
             SetValue($sid, $value);
         }
 
+    }
+
+    protected function GetValue($name, $value) {
+        $sid = @IPS_GetObjectIDByIdent($name, $this->InstanceID);
+        // $this->SendDebug(__FUNCTION__, "SV: ".$name." -> ".$sid." -> ".$value,0);
+        if ($sid) {
+            return GetValue($sid, $value);
+        }
+        return "";
     }
 
     private function createVariablenProfiles() {
@@ -194,41 +266,10 @@ class TasmotaIR extends TasmotaService {
             [false, 'Off', '', 0xFF0000],
             [true, 'On', '', 0x00FF00],
         ]);
-        $this->RegisterProfileIntegerEx("TasmotaHVAC.Mode", "Mode", "", "", array(
-            array(0, "Off", "", -1),
-            array(1, "Auto", "", -1),
-            array(2, "Cool", "", -1),
-            array(3, "Heat", "", -1),
-            array(4, "Dry", "", -1),
-            array(5, "fan", "", -1),
-        ));
-        $this->RegisterProfileIntegerEx("TasmotaHVAC.FanSpeed", "FanSpeed", "", "", array(
-            array(0, "Auto", "", -1),
-            array(1, "Minimal", "", -1),
-            array(2, "Low", "", -1),
-            array(3, "Medium", "", -1),
-            array(4, "High", "", -1),
-            array(5, "Max", "", -1),
-        ));
-        $this->RegisterProfileIntegerEx("TasmotaHVAC.SwingV", "SwingV", "", "", array(
-            array(0, "Auto", "", -1),
-            array(1, "Off", "", -1),
-            array(2, "Min", "", -1),
-            array(3, "Low", "", -1),
-            array(4, "Middle", "", -1),
-            array(5, "High", "", -1),
-            array(6, "Highest", "", -1),
-        ));
-        $this->RegisterProfileIntegerEx("TasmotaHVAC.SwingH", "SwingH", "", "", array(
-            array(0, "Auto", "", -1),
-            array(1, "Off", "", -1),
-            array(2, "LeftMax", "", -1),
-            array(3, "Left", "", -1),
-            array(4, "Middle", "", -1),
-            array(5, "Right", "", -1),
-            array(6, "RightMax", "", -1),
-            array(7, "Wide", "", -1),
-        ));
+        $this->RegisterProfileIntegerEx("TasmotaHVAC.Mode", "Mode", "", "", $modes);
+        $this->RegisterProfileIntegerEx("TasmotaHVAC.FanSpeed", "FanSpeed", "", "", $fanSpeeds);
+        $this->RegisterProfileIntegerEx("TasmotaHVAC.SwingV", "SwingV", "", "", $swingVs);
+        $this->RegisterProfileIntegerEx("TasmotaHVAC.SwingH", "SwingH", "", "", $swingHs);
         $this->RegisterProfileBooleanEx("TasmotaHVAC.Quiet", "Quiet", "", "", [
             [false, 'Off', '', 0xFF0000],
             [true, 'On', '', 0x00FF00],
