@@ -151,10 +151,10 @@ class TasmotaIR extends TasmotaService {
             [true, 'Online', '', 0x00FF00],
         ]);
 
-        $this->RegisterProfileBooleanEx("TasmotaHVAC.Power", "Power", "", "", array(
-            array(true, "On", "", 0xFF0000),
-            array(false, "Off", "", 0x00FF00),
-        ));
+        $this->RegisterProfileBooleanEx("TasmotaHVAC.Power", "Power", "", "", [
+            [false, 'Off', '', 0xFF0000],
+            [true, 'On', '', 0x00FF00],
+        ]);
         $this->RegisterProfileIntegerEx("TasmotaHVAC.Mode", "Mode", "", "", array(
             array(0, "Off", "", -1),
             array(1, "Auto", "", -1),
@@ -190,18 +190,18 @@ class TasmotaIR extends TasmotaService {
             array(6, "RightMax", "", -1),
             array(7, "Wide", "", -1),
         ));
-        $this->RegisterProfileBooleanEx("TasmotaHVAC.Quiet", "Quiet", "", "", array(
-            array(true, "On", "", 0xFF0000),
-            array(false, "Off", "", 0x00FF00),
-        ));
-        $this->RegisterProfileBooleanEx("TasmotaHVAC.Turbo", "Turbo", "", "", array(
-            array(true, "On", "", 0xFF0000),
-            array(false, "Off", "", 0x00FF00),
-        ));
-        $this->RegisterProfileBooleanEx("TasmotaHVAC.Econo", "Econo", "", "", array(
-            array(true, "On", "", 0xFF0000),
-            array(false, "Off", "", 0x00FF00),
-        ));
+        $this->RegisterProfileBooleanEx("TasmotaHVAC.Quiet", "Quiet", "", "", [
+            [false, 'Off', '', 0xFF0000],
+            [true, 'On', '', 0x00FF00],
+        ]);
+        $this->RegisterProfileBooleanEx("TasmotaHVAC.Turbo", "Turbo", "", "", [
+            [false, 'Off', '', 0xFF0000],
+            [true, 'On', '', 0x00FF00],
+        ]);
+        $this->RegisterProfileBooleanEx("TasmotaHVAC.Econo", "Econo", "", "", [
+            [false, 'Off', '', 0xFF0000],
+            [true, 'On', '', 0x00FF00],
+        ]);
 
     }
 }
