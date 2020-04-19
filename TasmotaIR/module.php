@@ -46,7 +46,7 @@ class TasmotaIR extends TasmotaService {
         $this->RegisterVariableBoolean('Tasmota_DeviceStatus', 'Status', 'Tasmota.DeviceStatus');
         //Settings
         $this->RegisterPropertyBoolean('SystemVariables', false);
-        $this->RegisterPropertyString('AircoType', 'MITSUBISHI_AC');
+        $this->RegisterPropertyInteger('AircoType', 1);
 
     }
 
