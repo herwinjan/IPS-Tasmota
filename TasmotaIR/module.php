@@ -246,11 +246,11 @@ class TasmotaIR extends TasmotaService {
 
     }
 
-    protected function _getValue($name, $value) {
+    protected function _getValue($name) {
         $sid = @IPS_GetObjectIDByIdent($name, $this->InstanceID);
         // $this->SendDebug(__FUNCTION__, "SV: ".$name." -> ".$sid." -> ".$value,0);
         if ($sid) {
-            return GetValue($sid, $value);
+            return GetValue($sid);
         }
         return "";
     }
