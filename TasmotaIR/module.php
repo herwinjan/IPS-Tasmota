@@ -234,6 +234,7 @@ class TasmotaIR extends TasmotaService {
 
         $payloadJSON = json_encode($payload, JSON_UNESCAPED_SLASHES);
         $this->SendDebug(__FUNCTION__ . ' JSON', $payloadJSON, 0);
+        $this->MQTTCommand("IRhvac", $payloadJSON);
 
     }
 
