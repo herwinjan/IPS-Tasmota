@@ -46,7 +46,7 @@ class TasmotaIR extends TasmotaService {
         $this->RegisterVariableBoolean('Tasmota_DeviceStatus', 'Status', 'Tasmota.DeviceStatus');
         //Settings
         $this->RegisterPropertyBoolean('SystemVariables', false);
-        $this->RegisterPropertyInteger('AircoType', 1);
+        $this->RegisterPropertyString('AircoType', "MITSUBISHI_AC");
 
     }
 
@@ -152,8 +152,8 @@ class TasmotaIR extends TasmotaService {
         ]);
 
         $this->RegisterProfileBooleanEx("TasmotaHVAC.Power", "Power", "", "", array(
-            array(true, "On", "", -1),
-            array(false, "Off", "", -1),
+            array(true, "On", "", 0xFF0000),
+            array(false, "Off", "", 0x00FF00),
         ));
         $this->RegisterProfileIntegerEx("TasmotaHVAC.Mode", "Mode", "", "", array(
             array(0, "Off", "", -1),
@@ -191,16 +191,16 @@ class TasmotaIR extends TasmotaService {
             array(7, "Wide", "", -1),
         ));
         $this->RegisterProfileBooleanEx("TasmotaHVAC.Quiet", "Quiet", "", "", array(
-            array(true, "On", "", -1),
-            array(false, "Off", "", -1),
+            array(true, "On", "", 0xFF0000),
+            array(false, "Off", "", 0x00FF00),
         ));
         $this->RegisterProfileBooleanEx("TasmotaHVAC.Turbo", "Turbo", "", "", array(
-            array(true, "On", "", -1),
-            array(false, "Off", "", -1),
+            array(true, "On", "", 0xFF0000),
+            array(false, "Off", "", 0x00FF00),
         ));
         $this->RegisterProfileBooleanEx("TasmotaHVAC.Econo", "Econo", "", "", array(
-            array(true, "On", "", -1),
-            array(false, "Off", "", -1),
+            array(true, "On", "", 0xFF0000),
+            array(false, "Off", "", 0x00FF00),
         ));
 
     }
