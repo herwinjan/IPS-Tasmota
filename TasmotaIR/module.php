@@ -137,16 +137,33 @@ class TasmotaIR extends TasmotaService {
         $this->SendDebug(__FUNCTION__ . ' Ident', $Ident, 0);
         $this->SendDebug(__FUNCTION__ . ' Value', $Value, 0);
 
-        //if (strlen($Ident) != 13) {
-        //   $power = substr($Ident, 13);
-        //} else {
-        //    $power = 0;
-        // }
-        //$result = $this->setPower(intval($power), $Value);
-
         switch ($Ident) {
         case 'TasmotaHVAC_Power':
             $this->setNewValue("TasmotaHVAC_Power", $Value);
+            break;
+        case 'TasmotaHVAC_Mode':
+            $this->setNewValue("TasmotaHVAC_Mode", $Value);
+            break;
+        case 'TasmotaHVAC_FanSpeed':
+            $this->setNewValue("TasmotaHVAC_FanSpeed", $Value);
+            break;
+        case 'TasmotaHVAC_SwingV':
+            $this->setNewValue("TasmotaHVAC_SwingV", $Value);
+            break;
+        case 'TasmotaHVAC_SwingH':
+            $this->setNewValue("TasmotaHVAC_SwingH", $Value);
+            break;
+        case 'TasmotaHVAC_Quiet':
+            $this->setNewValue("TasmotaHVAC_Quiet", $Value);
+            break;
+        case 'TasmotaHVAC_Turbo':
+            $this->setNewValue("TasmotaHVAC_Turbo", $Value);
+            break;
+        case 'TasmotaHVAC_Econo':
+            $this->setNewValue("TasmotaHVAC_Econo", $Value);
+            break;
+        case 'TasmotaHVAC_Temperature':
+            $this->setNewValue("TasmotaHVAC_Temperature", $Value);
             break;
 
         default:
