@@ -27,6 +27,33 @@
       "type": "CheckBox",
       "name": "MessageRetain",
       "caption": "Retain (MQTT)"
+    },
+    {
+      "type": "Select",
+      "name": "AircoType",
+      "caption": "Airco Type",
+      "options": [
+        {
+          "label": "DAIKIN",
+          "value": "DAIKIN"
+        },
+        {
+          "label": "MITSUBISHI_AC",
+          "value": "MITSUBISHI_AC"
+        },
+        {
+          "label": "MITSUBISHI_HEAVY_88",
+          "value": "MITSUBISHI_HEAVY_88"
+        },
+        {
+          "label": "MITSUBISHI_HEAVY_152",
+          "value": "MITSUBISHI_HEAVY_152"
+        },
+        {
+          "label": "DAIKIN216",
+          "value": "DAIKIN216"
+        }
+      ]
     }
   ],
   "actions": [
