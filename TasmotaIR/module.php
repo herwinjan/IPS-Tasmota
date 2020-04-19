@@ -135,18 +135,12 @@ class TasmotaIR extends TasmotaService {
         $this->SendDebug(__FUNCTION__ . ' Ident', $Ident, 0);
         $this->SendDebug(__FUNCTION__ . ' Value', $Value, 0);
 
-        if (strlen($Ident) != 13) {
-            $power = substr($Ident, 13);
-        } else {
-            $power = 0;
-        }
-        $result = $this->setPower(intval($power), $Value);
-    }
-
-    public function setFanSpeed(int $value) {
-        $command = 'FanSpeed';
-        $msg = strval($value);
-        $this->MQTTCommand($command, $msg);
+        //if (strlen($Ident) != 13) {
+        //   $power = substr($Ident, 13);
+        //} else {
+        //    $power = 0;
+        // }
+        //$result = $this->setPower(intval($power), $Value);
     }
 
     private function createVariablenProfiles() {
