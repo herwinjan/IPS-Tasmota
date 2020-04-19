@@ -35,23 +35,23 @@
       "options": [
         {
           "label": "DAIKIN",
-          "value": "0"
+          "value": 0
         },
         {
           "label": "MITSUBISHI_AC",
-          "value": "1"
+          "value": 1
         },
         {
           "label": "MITSUBISHI_HEAVY_88",
-          "value": "2"
+          "value": 2
         },
         {
           "label": "MITSUBISHI_HEAVY_152",
-          "value": "3"
+          "value": 3
         },
         {
           "label": "DAIKIN216",
-          "value": "4"
+          "value": 4
         }
       ]
     }
