@@ -1,5 +1,5 @@
 <?php
-/*
+
 declare (strict_types = 1);
 
 trait BufferHelper {
@@ -24,4 +24,3 @@ trait BufferHelper {
         $this->SetBuffer($name, serialize($value));
     }
 }
-*/
