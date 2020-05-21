@@ -3,7 +3,7 @@
 declare (strict_types = 1);
 
 require_once __DIR__ . '/../libs/TasmotaService.php';
-require_once __DIR__ . '/../libs/helper.php';
+//require_once __DIR__ . '/../libs/helper.php';
 
 $modes = array(
     array(0, "Off", "", -1),
@@ -42,7 +42,7 @@ $swingHs = array(
 );
 
 class TasmotaIR extends TasmotaService {
-    use BufferHelper;
+    //use BufferHelper;
 
     public function Create() {
         //Never delete this line!
